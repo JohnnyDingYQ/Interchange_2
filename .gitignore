@@ -81,6 +81,9 @@ crashlytics-build.properties
 # Code Coverage
 /CodeCoverage
 
+# Assets
+/Assets/Thirdparty/
+
 # OSX
 .DS_Store
 

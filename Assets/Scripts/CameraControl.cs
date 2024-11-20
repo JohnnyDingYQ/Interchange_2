@@ -2,7 +2,6 @@ using System;
 using UnityEngine.InputSystem;
 using Unity.Mathematics;
 using UnityEngine;
-using NUnit.Framework;
 
 public class CameraControl : MonoBehaviour
 {
@@ -11,7 +10,6 @@ public class CameraControl : MonoBehaviour
   [SerializeField]
   AnimationCurve zoomSpeed, panSpeed;
   [SerializeField]
-  InputActionAsset inputActions;
   Vector3 cameraVelocity;
   InputAction moveCamera, spinCamera;
   public static Quaternion Quaternion { get => Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0); }
@@ -29,8 +27,6 @@ public class CameraControl : MonoBehaviour
     ApplyCameraVelocity();
     cameraVelocity *= math.pow(math.E, -Time.deltaTime * driftDecayExponentMultiplier);
     ClampToBounds();
-    Camera.main.orthographicSize = Camera.main.transform.position.y;
-
   }
 
   void SetCameraVelocity(Vector3 cameraOffset)
@@ -48,7 +44,7 @@ public class CameraControl : MonoBehaviour
     {
       if (cameraOffset.y == 0)
         return;
-      Vector3 v = Camera.main.transform.position - Camera.main.ScreenToWorldPoint(new (Input.mousePosition.x, Input.mousePosition.y, 0));
+      Vector3 v = Camera.main.transform.position - Camera.main.ScreenToWorldPoint(new (Input.mousePosition.x, Input.mousePosition.y, Camera.main.transform.position.y));
       float t = (cameraHeight + cameraOffset.y - Camera.main.transform.position.y) / v.y;
       cameraVelocity.y = (t * v).y;
     }
