@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   laneCount: 0
-  gameSettings: {fileID: 11400000, guid: 5f2e9e44ba8d58248ad9d41e3831f444, type: 2}
+  roadSettings: {fileID: 11400000, guid: 5afb4d96911899c4382bbe3c3a47e6cd, type: 2}
 --- !u!33 &-7759327415483204456
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -80,7 +80,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 47b650f3099bcc744b64464b91c14299, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

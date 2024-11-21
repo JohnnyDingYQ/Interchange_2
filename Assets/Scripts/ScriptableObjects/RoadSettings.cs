@@ -1,8 +1,8 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GameSettings", menuName = "Scriptable Objects/GameSettings")]
+[CreateAssetMenu(fileName = "RoadSettings", menuName = "Scriptable Objects/RoadSettings")]
 public class RoadSettings : ScriptableObject
 {
-  float laneWidth;
-  float pointPerUnitLength;
+  public float LaneWidth;
+  public float PointPerUnitLength;
 }

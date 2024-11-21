@@ -6,7 +6,9 @@ using UnityEngine.Splines;
 public class Build : MonoBehaviour
 {
   [SerializeField]
-  PlayerInputHandling playerInputHandling; Game game;
+  PlayerInputHandling playerInputHandling;
+  [SerializeField]
+  Game game;
   [SerializeField]
   Road roadPrefab;
   int laneCount = 1;

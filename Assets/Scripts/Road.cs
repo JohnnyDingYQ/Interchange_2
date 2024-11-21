@@ -10,7 +10,7 @@ public class Road : MonoBehaviour
   [SerializeField]
   int laneCount;
   [SerializeField]
-  GameSettings gameSettings;
+  RoadSettings roadSettings;
   BezierCurve curve;
 
   void Start()
@@ -30,18 +30,18 @@ public class Road : MonoBehaviour
       DistanceToInterpolation[] lut = new DistanceToInterpolation[10];
       CurveUtility.CalculateCurveLengths(curve, lut);
       float length = CurveUtility.CalculateLength(curve);
-      int resolution = 10;
+      int numPoints = (int)math.ceil(length * roadSettings.PointPerUnitLength);
       Mesh mesh = new();
 
       // Create vertices
       List<Vector3> vertices = new();
-      for (int i = 0; i < resolution; i++)
+      for (int i = 0; i < numPoints; i++)
       {
-        float t = CurveUtility.GetDistanceToInterpolation(lut, length * i / (resolution - 1));
+        float t = CurveUtility.GetDistanceToInterpolation(lut, length * i / (numPoints - 1));
         float3 posOnCurve = CurveUtility.EvaluatePosition(curve, t);
         float3 normal = math.normalizesafe(math.cross(new float3(0, 1, 0), CurveUtility.EvaluateTangent(curve, t)));
-        vertices.Add(posOnCurve + normal * gameSettings.laneWidth * laneCount);
-        vertices.Add(posOnCurve - normal * gameSettings.laneWidth * laneCount);
+        vertices.Add(posOnCurve + roadSettings.LaneWidth * laneCount / 2 * normal);
+        vertices.Add(posOnCurve - roadSettings.LaneWidth * laneCount / 2 * normal);
       }
       // Create triangles
       List<int> triangles = new();
@@ -58,9 +58,21 @@ public class Road : MonoBehaviour
       for (int i = 0; i < vertices.Count; i++)
         normals.Add(new(0, 1, 0));
 
+
+      // Create uvs
+      Vector2[] uvs = new Vector2[numPoints * 2];
+      float width = laneCount * roadSettings.LaneWidth;
+      for (int i = 0; i < numPoints; i++)
+      {
+        float distanceOncurve = length * i / (numPoints - 1);
+        uvs[i * 2] = new(0, distanceOncurve / width);
+        uvs[i * 2 + 1] = new(1, distanceOncurve / width);
+      }
+
       mesh.SetVertices(vertices);
       mesh.SetTriangles(triangles, 0);
       mesh.SetNormals(normals);
+      mesh.SetUVs(0, uvs);
       return mesh;
     }
   }
