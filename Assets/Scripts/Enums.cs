@@ -1,0 +1,1 @@
+public enum Side { Start, End };

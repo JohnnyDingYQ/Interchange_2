@@ -5,4 +5,5 @@ public class RoadSettings : ScriptableObject
 {
   public float LaneWidth;
   public float PointPerUnitLength;
+  public float IntersectionSeparation;
 }

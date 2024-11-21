@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 514732119364863537}
-  - component: {fileID: 5321455840268698773}
+  - component: {fileID: -6944250238808991918}
   - component: {fileID: -7759327415483204456}
   - component: {fileID: -5061151864208810458}
   - component: {fileID: 7760603953393325630}
   m_Layer: 0
-  m_Name: Road
+  m_Name: Intersection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5321455840268698773
+--- !u!114 &-6944250238808991918
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,13 +44,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3817074783925709091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc16a752cab6e374fb7071ed32eed546, type: 3}
+  m_Script: {fileID: 11500000, guid: c5cc08917eb192940871516ad95eca10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  laneCount: 0
+  game: {fileID: 0}
   roadSettings: {fileID: 11400000, guid: 5afb4d96911899c4382bbe3c3a47e6cd, type: 2}
-  build: {fileID: 0}
 --- !u!33 &-7759327415483204456
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -82,7 +80,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: aa8b78b375873eb4a9104edfcfb3b5b4, type: 2}
+  - {fileID: 2100000, guid: 47b650f3099bcc744b64464b91c14299, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

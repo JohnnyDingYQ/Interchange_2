@@ -234,14 +234,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -0.00061035156
-      value: 0.083343506
-      inSlope: 0
-      outSlope: 0
+      time: 0
+      value: 0.028244019
+      inSlope: 0.6680647
+      outSlope: 0.6680647
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.0071647735
     - serializedVersion: 3
       time: 1
       value: 1
@@ -486,7 +486,7 @@ Transform:
   m_GameObject: {fileID: 992441182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -121.5216, y: -85.908005, z: -133.77519}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -621,6 +621,9 @@ MonoBehaviour:
   playerInputHandling: {fileID: 992441183}
   game: {fileID: 866011073}
   roadPrefab: {fileID: 5321455840268698773, guid: f30ad24a05373bf46904ac16f7e3cb12, type: 3}
+  intersectionPrefab: {fileID: -6944250238808991918, guid: 5922ebb4ea5aae344a07fd51bfb41281, type: 3}
+  roadSettings: {fileID: 11400000, guid: 5afb4d96911899c4382bbe3c3a47e6cd, type: 2}
+  HoveredRoad: 0
 --- !u!4 &1926947197
 Transform:
   m_ObjectHideFlags: 0
@@ -630,7 +633,7 @@ Transform:
   m_GameObject: {fileID: 1926947195}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -121.5216, y: -85.908005, z: -133.77519}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
