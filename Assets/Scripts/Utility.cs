@@ -19,7 +19,7 @@ public static class Utiliy
     {
       float t = CurveUtility.GetDistanceToInterpolation(lut, length * i / (numPoints - 1));
       float3 posOnCurve = CurveUtility.EvaluatePosition(curve, t);
-      float3 normal = GetNormal(curve, t);
+      float3 normal = Get2DNormal(curve, t);
       vertices.Add(posOnCurve + halfWidth * normal);
       vertices.Add(posOnCurve - halfWidth * normal);
     }
@@ -29,8 +29,8 @@ public static class Utiliy
     {
       int upperLeft = i, upperRight = i + 1;
       int lowerLeft = i - 2, lowerRight = i - 1;
-      triangles.AddRange(new List<int>() { upperRight, upperLeft, lowerLeft });
-      triangles.AddRange(new List<int>() { lowerLeft, lowerRight, upperRight });
+      triangles.AddRange(new List<int>() { lowerLeft, upperLeft, upperRight, });
+      triangles.AddRange(new List<int>() { upperRight, lowerRight, lowerLeft });
     }
 
     // Create normals
@@ -56,10 +56,10 @@ public static class Utiliy
     return mesh;
   }
 
-  public static float3 GetNormal(BezierCurve curve, float t)
+  public static float3 Get2DNormal(BezierCurve curve, float t)
   {
-    float3 normal = math.cross(new float3(0, 1, 0), CurveUtility.EvaluateTangent(curve, t));
-    normal.y = 0;
+    float3 tangent = CurveUtility.EvaluateTangent(curve, t);
+    float3 normal = new(-tangent.z, 0, tangent.x);
     return math.normalizesafe(normal);
   }
 

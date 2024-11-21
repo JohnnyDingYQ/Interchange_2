@@ -29,30 +29,15 @@ public class Intersection : MonoBehaviour
   {
     RoadLane from = connections.Keys.First();
     RoadLane to = connections.Values.First();
-    Debug.Log(from.Road);
-    Debug.Log(to.Road);
     if (game.TryGetRoad(from.Road, out Road road0) && game.TryGetRoad(to.Road, out Road road1))
     {
       float3 lane0 = road0.GetLanePos(Side.End, 0);
       float3 lane1 = road1.GetLanePos(Side.Start, 0);
 
-      if (FindIntersection(
-          lane0.xz,
-          CurveUtility.EvaluateTangent(road0.Curve, 1).xz,
-          lane1.xz,
-          CurveUtility.EvaluateTangent(road1.Curve, 0).xz,
-          out float2 intersection))
-      {
-        BezierCurve curve = new(lane0, new float3(intersection.x, 0, intersection.y), lane1);
-        Mesh mesh = Utiliy.CreateMesh(curve, roadSettings.PointPerUnitLength, roadSettings.LaneWidth / 2);
-        GetComponent<MeshFilter>().sharedMesh = mesh;
-        Debug.Log("should be successful");
-      }
-      else
-      {
-        Debug.Log("intersection not found");
-        return;
-      }
+      BezierCurve curve = new(lane0, lane1);
+      Mesh mesh = Utiliy.CreateMesh(curve, roadSettings.PointPerUnitLength, roadSettings.LaneWidth / 2);
+      GetComponent<MeshFilter>().sharedMesh = mesh;
+      Debug.Log("should be successful");
     }
     else
     {
