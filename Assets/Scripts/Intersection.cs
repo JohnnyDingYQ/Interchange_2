@@ -10,7 +10,7 @@ public class Intersection : MonoBehaviour
   Game game;
   [SerializeField]
   RoadSettings roadSettings;
-  uint id;
+  public uint Id;
   [SerializeField]
   Dictionary<RoadLane, RoadLane> connections;
 
@@ -27,6 +27,7 @@ public class Intersection : MonoBehaviour
 
   public void EvaluateMesh()
   {
+    Trim();
     RoadLane from = connections.Keys.First();
     RoadLane to = connections.Values.First();
     if (game.TryGetRoad(from.Road, out Road road0) && game.TryGetRoad(to.Road, out Road road1))
@@ -34,7 +35,7 @@ public class Intersection : MonoBehaviour
       float3 lane0 = road0.GetLanePos(Side.End, 0);
       float3 lane1 = road1.GetLanePos(Side.Start, 0);
 
-      BezierCurve curve = new(lane0, lane1);
+      BezierCurve curve = new(lane0, (lane0 + lane1) / 2, lane1);
       Mesh mesh = Utiliy.CreateMesh(curve, roadSettings.PointPerUnitLength, roadSettings.LaneWidth / 2);
       GetComponent<MeshFilter>().sharedMesh = mesh;
       Debug.Log("should be successful");
@@ -69,6 +70,27 @@ public class Intersection : MonoBehaviour
       return true;
     }
 
+  }
+
+  // Remove connection if road no longer exists
+  // If intersection is empty, delete itself
+  public void Trim()
+  {
+    List<RoadLane> toRemove = new();
+    foreach (RoadLane from in connections.Keys)
+    {
+      RoadLane to = connections[from];
+      if (!game.TryGetRoad(from.Road, out _) || !game.TryGetRoad(to.Road, out _))
+      {
+        toRemove.Add(from);
+      }
+    }
+    toRemove.ForEach(r => connections.Remove(r));
+    if (connections.Count == 0)
+    {
+      game.RemoveIntersection(this);
+      Destroy(gameObject);
+    }
   }
 
   public struct RoadLane

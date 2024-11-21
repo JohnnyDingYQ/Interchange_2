@@ -20,6 +20,7 @@ public class Build : MonoBehaviour
   bool assignedPA, assignedPB;
   public SnapPoint SelectedSnap;
   SnapPoint savedSnap;
+  public Road HoveredRoad;
 
   void Start()
   {
@@ -51,12 +52,14 @@ public class Build : MonoBehaviour
     // Handle third click
     BezierCurve curve = new(PA, PB, GetPointPos(playerInputHandling.MouseWorldPos));
     Road road = Instantiate(roadPrefab);
-    road.Initialize(game.GetNextRoadId(), curve, laneCount, this);
     game.AddRoad(road);
+    road.Initialize(curve, laneCount, this);
 
     if (savedSnap != null && game.TryGetRoad(savedSnap.RoadId, out Road roadToConnect))
     {
+      Debug.Log("hi");
       Intersection intersection = Instantiate(intersectionPrefab);
+      game.AddIntersection(intersection);
       intersection.Initialize(game);
       intersection.AddConnection(new(roadToConnect.Id, 0), new(road.Id, 0));
       intersection.EvaluateMesh();
@@ -95,5 +98,14 @@ public class Build : MonoBehaviour
       return GetPointPos(playerInputHandling.MouseWorldPos);
 
     }
+  }
+
+  public void RemoveRoad()
+  {
+    if (HoveredRoad == null)
+      return;
+    game.RemoveRoad(HoveredRoad);
+    Destroy(HoveredRoad.gameObject);
+    game.TrimAllIntersections();
   }
 }

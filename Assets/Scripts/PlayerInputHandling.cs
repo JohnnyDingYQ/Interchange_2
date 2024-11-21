@@ -7,12 +7,14 @@ public class PlayerInputHandling : MonoBehaviour
   [SerializeField]
   Build build;
   public float2 MouseWorldPos;
-  InputAction buildRoad;
+  InputAction buildRoad, removeRoad;
 
   void Start()
   {
     buildRoad = InputSystem.actions.FindAction("Build");
+    removeRoad = InputSystem.actions.FindAction("Remove");
     buildRoad.canceled += BuildRoad;
+    removeRoad.canceled += RemoveRoad;
   }
 
   void Update()
@@ -31,5 +33,10 @@ public class PlayerInputHandling : MonoBehaviour
   void BuildRoad(InputAction.CallbackContext context)
   {
     build.BuildRoad();
+  }
+
+  void RemoveRoad(InputAction.CallbackContext context)
+  {
+    build.RemoveRoad();
   }
 }

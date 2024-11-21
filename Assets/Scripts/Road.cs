@@ -21,13 +21,21 @@ public class Road : MonoBehaviour
   {
   }
 
-  // Other functions
-  public void Initialize(uint id, BezierCurve curve, int laneCount, Build build)
+  void OnMouseOver()
   {
-    Assert.NotZero(laneCount);
-    Id = id;
+    build.HoveredRoad = this;
+  }
+
+  void OnMouseExit()
+  {
+    build.HoveredRoad = null;
+  }
+
+  // Other functions
+  public void Initialize(BezierCurve curve, int laneCount, Build build)
+  {
     LaneCount = laneCount;
-    this.Curve = curve;
+    Curve = curve;
     this.build = build;
     MeshFilter meshFilter = GetComponent<MeshFilter>();
     Mesh mesh = Utiliy.CreateMesh(curve, roadSettings.PointPerUnitLength, roadSettings.LaneWidth * LaneCount / 2);
