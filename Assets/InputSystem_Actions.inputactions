@@ -40,6 +40,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OneLane",
+                    "type": "Button",
+                    "id": "24fdb8d6-61fb-43b5-a08d-b97e624c8518",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TwoLane",
+                    "type": "Button",
+                    "id": "50f9351c-c335-4177-93ae-1a8ab64745ab",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ThreeLane",
+                    "type": "Button",
+                    "id": "97cbfc6e-3e56-40d4-b0c4-563c29e87727",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -172,6 +199,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "baa09e92-38b5-453a-bd7c-2f03d5e48913",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OneLane",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d394fa13-778d-4f81-8c78-4d9c32dbfb4b",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TwoLane",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "59b1a593-4219-47db-9ba5-e48a264f6782",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ThreeLane",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

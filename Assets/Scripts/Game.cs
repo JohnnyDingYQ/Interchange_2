@@ -13,14 +13,14 @@ public class Game : MonoBehaviour
   GameSettings gameSettings;
   [SerializeField]
   uint roadId, intersectionId;
-  Dictionary<uint, Road> roads;
-  Dictionary<uint, Intersection> intersections;
+  public Dictionary<uint, Road> Roads;
+  public Dictionary<uint, Intersection> Intersections;
+  public Dictionary<RoadLane, List<RoadLane>> Connections;
 
   void Start()
   {
-    intersections = new();
-    intersectionId = 1;
-    roads = new();
+    Connections = new();
+    Roads = new();
     roadId = 1;
   }
 
@@ -28,40 +28,32 @@ public class Game : MonoBehaviour
   {
     Assert.Zero(road.Id);
     road.Id = roadId;
-    roads.Add(roadId, road);
+    Roads.Add(roadId, road);
     roadId++;
   }
 
   public void RemoveRoad(Road road)
   {
-    roads.Remove(road.Id);
+    Roads.Remove(road.Id);
   }
 
   public bool TryGetRoad(uint key, out Road road)
   {
-    return roads.TryGetValue(key, out road);
+    return Roads.TryGetValue(key, out road);
   }
 
-  public void AddIntersection(Intersection intersection)
-  {
-    Assert.Zero(intersection.Id);
-    intersection.Id = intersectionId;
-    intersections.Add(intersectionId, intersection);
-    intersectionId++;
-  }
 
-  public void RemoveIntersection(Intersection intersection)
+  public void AddConnection(RoadLane from, RoadLane to)
   {
-    intersections.Remove(intersection.Id);
-  }
-
-  public bool TryGetIntersection(uint key, out Intersection intersection)
-  {
-    return intersections.TryGetValue(key, out intersection);
+    if (!Connections.ContainsKey(from))
+    {
+      Connections[from] = new List<RoadLane>();
+    }
+    Connections[from].Add(to);
   }
 
   public void TrimAllIntersections()
   {
-    intersections.Values.ToList().ForEach(i => i.Trim());
+    // Intersections.Values.ToList().ForEach(i => i.Trim());
   }
 }

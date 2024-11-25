@@ -8,6 +8,7 @@ public class SnapPoint : MonoBehaviour
     Material hovered;
     Build build;
     public uint RoadId;
+    public int LaneIndex;
 
     void Awake()
     {
@@ -17,18 +18,20 @@ public class SnapPoint : MonoBehaviour
     void OnMouseOver()
     {
         GetComponent<Renderer>().material = hovered;
-        build.SelectedSnap = this;
+        build.HoveredSnap = this;
     }
 
     void OnMouseExit()
     {
         GetComponent<Renderer>().material = idle;
-        build.SelectedSnap = null;
+        build.HoveredSnap = null;
     }
 
-    public void Initialize(uint roadId, Build build)
+    public void Initialize(uint roadId, int laneIndex, Build build)
     {
         RoadId = roadId;
         this.build = build;
+        LaneIndex = laneIndex;
+        gameObject.name = $"Road {roadId} Lane {laneIndex}";
     }
 }

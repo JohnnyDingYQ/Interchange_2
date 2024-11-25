@@ -42,6 +42,7 @@ public class Road : MonoBehaviour
     meshFilter.sharedMesh = mesh;
     GetComponent<MeshCollider>().sharedMesh = mesh;
     CreateSnapPoints();
+    gameObject.name = Id.ToString();
   }
 
   public float3 GetLanePos(Side side, int laneIndex)
@@ -63,10 +64,12 @@ public class Road : MonoBehaviour
       float3 tangent = math.normalizesafe(CurveUtility.EvaluateTangent(Curve, 1));
       pos += tangent * roadSettings.IntersectionSeparation / 2;
       SnapPoint snapPoint = Instantiate(snapPointPrefab, transform);
+
+      // set transfrom of created snap points
       snapPoint.transform.position = pos;
-      snapPoint.transform.localScale = new float3(roadSettings.LaneWidth / 5, 1, roadSettings.IntersectionSeparation) / 10;
+      snapPoint.transform.localScale = new float3(roadSettings.LaneWidth / 2, 1, roadSettings.IntersectionSeparation) / 10;
       snapPoint.transform.rotation = Quaternion.LookRotation(tangent);
-      snapPoint.Initialize(Id, build);
+      snapPoint.Initialize(Id, i, build);
     }
   }
 }

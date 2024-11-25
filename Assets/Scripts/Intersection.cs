@@ -10,30 +10,21 @@ public class Intersection : MonoBehaviour
   Game game;
   [SerializeField]
   RoadSettings roadSettings;
-  public uint Id;
-  [SerializeField]
-  Dictionary<RoadLane, RoadLane> connections;
-
-  public void Initialize(Game game)
+  public RoadLane from;
+  public RoadLane to;
+  public void Initialize(RoadLane from, RoadLane to, Game game)
   {
-    connections = new();
+    this.from = from;
+    this.to = to;
     this.game = game;
-  }
-
-  public void AddConnection(RoadLane from, RoadLane to)
-  {
-    connections.Add(from, to);
   }
 
   public void EvaluateMesh()
   {
-    Trim();
-    RoadLane from = connections.Keys.First();
-    RoadLane to = connections.Values.First();
     if (game.TryGetRoad(from.Road, out Road road0) && game.TryGetRoad(to.Road, out Road road1))
     {
-      float3 lane0 = road0.GetLanePos(Side.End, 0);
-      float3 lane1 = road1.GetLanePos(Side.Start, 0);
+      float3 lane0 = road0.GetLanePos(Side.End, from.Lane);
+      float3 lane1 = road1.GetLanePos(Side.Start, to.Lane);
 
       BezierCurve curve = new(lane0, (lane0 + lane1) / 2, lane1);
       Mesh mesh = Utiliy.CreateMesh(curve, roadSettings.PointPerUnitLength, roadSettings.LaneWidth / 2);
@@ -71,42 +62,21 @@ public class Intersection : MonoBehaviour
     }
 
   }
+}
 
-  // Remove connection if road no longer exists
-  // If intersection is empty, delete itself
-  public void Trim()
+public struct RoadLane
+{
+  public uint Road;
+  public int Lane;
+
+  public RoadLane(uint road, int lane)
   {
-    List<RoadLane> toRemove = new();
-    foreach (RoadLane from in connections.Keys)
-    {
-      RoadLane to = connections[from];
-      if (!game.TryGetRoad(from.Road, out _) || !game.TryGetRoad(to.Road, out _))
-      {
-        toRemove.Add(from);
-      }
-    }
-    toRemove.ForEach(r => connections.Remove(r));
-    if (connections.Count == 0)
-    {
-      game.RemoveIntersection(this);
-      Destroy(gameObject);
-    }
+    Road = road;
+    Lane = lane;
   }
 
-  public struct RoadLane
+  public override readonly int GetHashCode()
   {
-    public uint Road;
-    public int Lane;
-
-    public RoadLane(uint road, int lane)
-    {
-      Road = road;
-      Lane = lane;
-    }
-
-    public override readonly int GetHashCode()
-    {
-      return HashCode.Combine(Road.GetHashCode(), Lane.GetHashCode());
-    }
+    return HashCode.Combine(Road.GetHashCode(), Lane.GetHashCode());
   }
 }

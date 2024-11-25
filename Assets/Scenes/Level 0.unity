@@ -428,7 +428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameSettings: {fileID: 11400000, guid: 5f2e9e44ba8d58248ad9d41e3831f444, type: 2}
   roadId: 0
-  intersectionsId: 0
+  intersectionId: 0
 --- !u!4 &866011074
 Transform:
   m_ObjectHideFlags: 0
@@ -474,6 +474,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   build: {fileID: 1926947196}
+  game: {fileID: 866011073}
   MouseWorldPos:
     x: 0
     y: 0
@@ -623,7 +624,10 @@ MonoBehaviour:
   roadPrefab: {fileID: 5321455840268698773, guid: f30ad24a05373bf46904ac16f7e3cb12, type: 3}
   intersectionPrefab: {fileID: -6944250238808991918, guid: 5922ebb4ea5aae344a07fd51bfb41281, type: 3}
   roadSettings: {fileID: 11400000, guid: 5afb4d96911899c4382bbe3c3a47e6cd, type: 2}
-  HoveredRoad: 0
+  LaneCount: 0
+  HoveredSnap: {fileID: 0}
+  savedSnap: {fileID: 0}
+  HoveredRoad: {fileID: 0}
 --- !u!4 &1926947197
 Transform:
   m_ObjectHideFlags: 0
