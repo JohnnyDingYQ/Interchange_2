@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -58,15 +59,33 @@ public class Build : MonoBehaviour
 
     if (savedSnap != null && game.TryGetRoad(savedSnap.RoadId, out Road roadToConnect))
     {
-      // add connection to game
-      RoadLane from = new(roadToConnect.Id, savedSnap.LaneIndex);
-      RoadLane to = new(road.Id, 0);
-      game.AddConnection(from, to);
+      List<KeyValuePair<RoadLane, RoadLane>> newConnections = new();
+      if (LaneCount == 1)
+      {
+        newConnections.Add(new(new(roadToConnect.Id, savedSnap.LaneIndex), new(road.Id, 0)));
+      }
+      if (LaneCount == 2)
+      {
+        newConnections.Add(new(new(roadToConnect.Id, savedSnap.LaneIndex), new(road.Id, 0)));
+        newConnections.Add(new(new(roadToConnect.Id, savedSnap.LaneIndex + 1), new(road.Id, 1)));
+      }
+      if (LaneCount == 3)
+      {
+        newConnections.Add(new(new(roadToConnect.Id, savedSnap.LaneIndex - 1), new(road.Id, 0)));
+        newConnections.Add(new(new(roadToConnect.Id, savedSnap.LaneIndex), new(road.Id, 1)));
+        newConnections.Add(new(new(roadToConnect.Id, savedSnap.LaneIndex + 1), new(road.Id, 2)));
+      }
 
       // create and evaluate intersection
-      Intersection intersection = Instantiate(intersectionPrefab, roadToConnect.transform);
-      intersection.Initialize(from, to, game);
-      intersection.EvaluateMesh();
+      foreach (KeyValuePair<RoadLane, RoadLane> connection in newConnections)
+      {
+        RoadLane from = connection.Key;
+        RoadLane to = connection.Value;
+        game.AddConnection(from, to);
+        Intersection intersection = Instantiate(intersectionPrefab, roadToConnect.transform);
+        intersection.Initialize(from, to, game);
+        intersection.EvaluateMesh();
+      }
       DestroyImmediate(savedSnap.gameObject);
     }
     assignedPA = false;
@@ -85,7 +104,12 @@ public class Build : MonoBehaviour
       {
         savedSnap = HoveredSnap;
         float3 tangent = math.normalizesafe(CurveUtility.EvaluateTangent(hoveredRoad.Curve, 1));
-        return tangent * roadSettings.IntersectionSeparation + hoveredRoad.GetLanePos(Side.End, savedSnap.LaneIndex);
+        float3 pos = hoveredRoad.GetLanePos(Side.End, savedSnap.LaneIndex);
+        if (LaneCount == 2)
+        {
+          pos = math.lerp(hoveredRoad.GetLanePos(Side.End, savedSnap.LaneIndex), hoveredRoad.GetLanePos(Side.End, savedSnap.LaneIndex + 1), 0.5f);
+        }
+        return pos + tangent * roadSettings.IntersectionSeparation;
       }
       return GetPointPos(playerInputHandling.MouseWorldPos);
     }
@@ -94,13 +118,11 @@ public class Build : MonoBehaviour
     {
       if (savedSnap != null && game.TryGetRoad(savedSnap.RoadId, out Road hoveredRoad))
       {
-        float3 origin = hoveredRoad.GetLanePos(Side.End, savedSnap.LaneIndex);
         float3 b = math.normalizesafe(CurveUtility.EvaluateTangent(hoveredRoad.Curve, 1));
-        float3 a = GetPointPos(playerInputHandling.MouseWorldPos) - origin;
-        return math.project(a, b) + origin;
+        float3 a = GetPointPos(playerInputHandling.MouseWorldPos) - PA;
+        return math.project(a, b) + PA;
       }
       return GetPointPos(playerInputHandling.MouseWorldPos);
-
     }
   }
 
@@ -117,19 +139,15 @@ public class Build : MonoBehaviour
   {
     foreach (Road road in game.Roads.Values)
     {
-      DeleteSnapPoints(road);
-
+      road.CreateOddSnapPoints();
     }
+  }
 
-    static void DeleteSnapPoints(Road road)
+  public void CreateEvenSnapPoints()
+  {
+    foreach (Road road in game.Roads.Values)
     {
-      foreach (Transform child in road.transform)
-      {
-        if (child.GetComponent<SnapPoint>() != null)
-        {
-          Destroy(child.gameObject);
-        }
-      }
+      road.CreateEvenSnapPoints();
     }
   }
 }

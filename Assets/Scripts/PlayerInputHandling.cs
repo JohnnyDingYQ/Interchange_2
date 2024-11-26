@@ -51,16 +51,18 @@ public class PlayerInputHandling : MonoBehaviour
   void OneLane(InputAction.CallbackContext context)
   {
     build.LaneCount = 1;
+    build.CreateOddSnapPoints();
   }
 
   void TwoLane(InputAction.CallbackContext context)
   {
     build.LaneCount = 2;
-    // game.DeleteAllSnapPoints();
+    build.CreateEvenSnapPoints();
   }
 
   void ThreeLane(InputAction.CallbackContext context)
   {
     build.LaneCount = 3;
+    build.CreateOddSnapPoints();
   }
 }

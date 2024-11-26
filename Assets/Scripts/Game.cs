@@ -12,10 +12,9 @@ public class Game : MonoBehaviour
   [SerializeField]
   GameSettings gameSettings;
   [SerializeField]
-  uint roadId, intersectionId;
+  uint roadId;
   public Dictionary<uint, Road> Roads;
-  public Dictionary<uint, Intersection> Intersections;
-  public Dictionary<RoadLane, List<RoadLane>> Connections;
+  public Dictionary<RoadLane, RoadLane> Connections;
 
   void Start()
   {
@@ -45,11 +44,7 @@ public class Game : MonoBehaviour
 
   public void AddConnection(RoadLane from, RoadLane to)
   {
-    if (!Connections.ContainsKey(from))
-    {
-      Connections[from] = new List<RoadLane>();
-    }
-    Connections[from].Add(to);
+    Connections.Add(from, to);
   }
 
   public void TrimAllIntersections()

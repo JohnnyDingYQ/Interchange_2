@@ -41,8 +41,15 @@ public class Road : MonoBehaviour
     Mesh mesh = Utiliy.CreateMesh(curve, roadSettings.PointPerUnitLength, roadSettings.LaneWidth * LaneCount / 2);
     meshFilter.sharedMesh = mesh;
     GetComponent<MeshCollider>().sharedMesh = mesh;
-    CreateSnapPoints();
     gameObject.name = Id.ToString();
+    if (build.LaneCount % 2 == 1)
+    {
+      CreateOddSnapPoints();
+    }
+    else
+    {
+      CreateEvenSnapPoints();
+    }
   }
 
   public float3 GetLanePos(Side side, int laneIndex)
@@ -56,8 +63,9 @@ public class Road : MonoBehaviour
     return leftMost - (0.5f + laneIndex) * roadSettings.LaneWidth * normal;
   }
 
-  void CreateSnapPoints()
+  public void CreateOddSnapPoints()
   {
+    DeleteSnapPoints();
     for (int i = 0; i < LaneCount; i++)
     {
       float3 pos = GetLanePos(Side.End, i);
@@ -70,6 +78,34 @@ public class Road : MonoBehaviour
       snapPoint.transform.localScale = new float3(roadSettings.LaneWidth / 2, 1, roadSettings.IntersectionSeparation) / 10;
       snapPoint.transform.rotation = Quaternion.LookRotation(tangent);
       snapPoint.Initialize(Id, i, build);
+    }
+  }
+  public void CreateEvenSnapPoints()
+  {
+    DeleteSnapPoints();
+    for (int i = 0; i < LaneCount - 1; i++)
+    {
+      float3 pos = math.lerp(GetLanePos(Side.End, i), GetLanePos(Side.End, i + 1), 0.5f);
+      float3 tangent = math.normalizesafe(CurveUtility.EvaluateTangent(Curve, 1));
+      pos += tangent * roadSettings.IntersectionSeparation / 2;
+      SnapPoint snapPoint = Instantiate(snapPointPrefab, transform);
+
+      // set transfrom of created snap points
+      snapPoint.transform.position = pos;
+      snapPoint.transform.localScale = new float3(roadSettings.LaneWidth / 2, 1, roadSettings.IntersectionSeparation) / 10;
+      snapPoint.transform.rotation = Quaternion.LookRotation(tangent);
+      snapPoint.Initialize(Id, i, build);
+    }
+  }
+
+  public void DeleteSnapPoints()
+  {
+    foreach (Transform child in transform)
+    {
+      if (child.GetComponent<SnapPoint>() != null)
+      {
+        Destroy(child.gameObject);
+      }
     }
   }
 }
